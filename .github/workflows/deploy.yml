@@ -1,0 +1,50 @@
+name: 🚀 Deploy React App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is not "main"
+
+permissions:
+  contents: write  # Allows GitHub Actions to push to the gh-pages branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ⬇️ Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Ensures full commit history for proper deployment
+
+      - name: ⚡ Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Use a stable Node.js version
+
+      - name: 📦 Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: 📥 Install Dependencies
+        run: npm install
+
+      - name: 🏗️ Build React App
+        run: npm run build
+
+      - name: 🛠️ Configure GitHub Pages
+        run: |
+          touch build/.nojekyll  # Disable Jekyll to allow files like _next/
+          echo "parkeze.com" > build/CNAME  # Change if you use a custom domain
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages  # Deploy to gh-pages branch
+          folder: build  # The folder where the React app is built
+          token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub Token for authentication
