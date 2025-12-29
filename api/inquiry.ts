@@ -1,33 +1,50 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { insertInquirySchema } from "../shared/schema";
-import { sendInquiryEmail } from "../server/email";
+import { Resend } from "resend";
+import { z } from "zod";
 
-// helper to return the 400 schema your client expects
-function badRequest(res: VercelResponse, message: string, field?: string) {
-  return res.status(400).json({ message, ...(field ? { field } : {}) });
-}
+const InquirySchema = z.object({
+  name: z.string().min(1),
+  email: z.string().email(),
+  message: z.string().min(1),
+  type: z.enum(["general", "developer", "sales"]),
+});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "contact@parkeze.com";
+  const EMAIL_FROM = process.env.EMAIL_FROM || "ParkeZe <noreply@parkeze.com>";
+
+  if (!RESEND_API_KEY) {
+    return res.status(500).json({ message: "RESEND_API_KEY is not set" });
+  }
+
   try {
     const raw = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const inquiry = InquirySchema.parse(raw);
 
-    // zod validation (same as client)
-    const inquiry = insertInquirySchema.parse(raw);
+    const resend = new Resend(RESEND_API_KEY);
 
-    // send email via your existing Resend code
-    await sendInquiryEmail({
-      name: inquiry.name,
-      email: inquiry.email,
-      message: inquiry.message,
-      type: inquiry.type,
+    await resend.emails.send({
+      from: EMAIL_FROM,
+      to: [CONTACT_TO_EMAIL],
+      replyTo: inquiry.email,
+      subject: `New ${inquiry.type} inquiry — ${inquiry.name}`,
+      text: [
+        `New inquiry (${inquiry.type})`,
+        ``,
+        `Name: ${inquiry.name}`,
+        `Email: ${inquiry.email}`,
+        ``,
+        `Message:`,
+        inquiry.message,
+      ].join("\n"),
     });
 
-    // Return a shape compatible with `inquiries.$inferSelect`
-    // (No DB yet, so we generate ID + timestamps)
+    // match your client expectations if you want (201 + message)
     return res.status(201).json({
       id: crypto.randomUUID(),
       name: inquiry.name,
@@ -37,15 +54,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       createdAt: new Date().toISOString(),
     });
   } catch (err: any) {
-    // Zod errors: return your validation schema
     if (err?.name === "ZodError") {
       const first = err.issues?.[0];
       const field = first?.path?.[0] ? String(first.path[0]) : undefined;
-      const msg = first?.message ?? "Validation failed";
-      return badRequest(res, msg, field);
+      return res.status(400).json({
+        message: first?.message ?? "Validation failed",
+        ...(field ? { field } : {}),
+      });
     }
 
-    // Resend / other runtime errors (still return 400 to match your client parsing)
-    return badRequest(res, err?.message ?? "Failed to submit inquiry");
+    console.error("Inquiry function failed:", err);
+    return res.status(500).json({ message: err?.message ?? "Internal error" });
   }
 }
