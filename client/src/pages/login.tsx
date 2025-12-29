@@ -90,7 +90,7 @@ export default function Login() {
         </CardContent>
         <CardFooter className="flex flex-col gap-4 text-center text-sm text-muted-foreground">
           <div>
-            Don't have an account? <Link href="/#contact-section" className="text-primary font-medium hover:underline">Contact@Parkeze.com</Link>
+            Don't have an account? <Link href="/#contact-section" className="text-primary font-medium hover:underline">contact@parkeze.com</Link>
           </div>
         </CardFooter>
       </Card>
