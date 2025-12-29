@@ -219,7 +219,7 @@ export default function Home() {
               },
               {
                 title: "Developers",
-                desc: "Build custom mobility solutions on our open API.",
+                desc: "Build custom mobility solutions on our API.",
               },
             ].map((item, i) => (
               <div
