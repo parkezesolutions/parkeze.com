@@ -39,12 +39,12 @@ jobs:
 
       - name: 🛠️ Configure GitHub Pages
         run: |
-          touch build/.nojekyll  # Disable Jekyll to allow files like _next/
-          echo "parkeze.com" > build/CNAME  # Change if you use a custom domain
+          touch dist/.nojekyll  # Disable Jekyll to allow files like _next/
+          echo "parkeze.com" > dist/CNAME  # Change if you use a custom domain
 
       - name: 🚀 Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages  # Deploy to gh-pages branch
-          folder: build  # The folder where the React app is built
+          folder: dist  # The folder where the React app is built
           token: ${{ secrets.GITHUB_TOKEN }}  # Use GitHub Token for authentication
