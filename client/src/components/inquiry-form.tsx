@@ -46,7 +46,7 @@ export function InquiryForm({ type, className, onSuccess }: InquiryFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Darssan Eswar" {...field} className="bg-background/50" />
+                <Input placeholder="First Name Last Name" {...field} className="bg-background/50" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -60,7 +60,7 @@ export function InquiryForm({ type, className, onSuccess }: InquiryFormProps) {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="darssan@parkeze.com" {...field} className="bg-background/50" />
+                <Input placeholder="name@company.com" {...field} className="bg-background/50" />
               </FormControl>
               <FormMessage />
             </FormItem>
