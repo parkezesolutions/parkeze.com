@@ -108,14 +108,14 @@ export default function Products() {
                 {/* Light mode */}
                 <img
                   src={DayTimeCar}
-                  alt="ParkeZe ecosystem (day)"
+                  alt="Parkeze ecosystem (day)"
                   className="block dark:hidden w-full h-auto"
                   loading="lazy"
                 />
                 {/* Dark mode */}
                 <img
                   src={NightTimeCar}
-                  alt="ParkeZe ecosystem (night)"
+                  alt="Parkeze ecosystem (night)"
                   className="hidden dark:block w-full h-auto"
                   loading="lazy"
                 />

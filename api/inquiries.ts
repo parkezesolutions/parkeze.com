@@ -16,7 +16,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
   const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || "contact@parkeze.com";
-  const EMAIL_FROM = process.env.EMAIL_FROM || "ParkeZe <noreply@parkeze.com>";
+  const EMAIL_FROM = process.env.EMAIL_FROM || "Parkeze <noreply@parkeze.com>";
 
   if (!RESEND_API_KEY) {
     return res.status(500).json({ message: "RESEND_API_KEY is not set" });

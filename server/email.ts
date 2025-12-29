@@ -13,7 +13,7 @@ export async function sendInquiryEmail(inquiry: {
   if (!resend) throw new Error("RESEND_API_KEY is not set");
 
   const to = process.env.CONTACT_TO_EMAIL || "contact@parkeze.com";
-  const from = process.env.EMAIL_FROM || "ParkeZe <noreply@parkeze.com>";
+  const from = process.env.EMAIL_FROM || "Parkeze <noreply@parkeze.com>";
 
   await resend.emails.send({
     from,
