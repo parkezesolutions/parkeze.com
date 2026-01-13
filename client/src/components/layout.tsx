@@ -1,7 +1,7 @@
 import { Link, useLocation } from "wouter";
 import logo from "@assets/ParkezeNoBg.png";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/hooks/use-theme";
@@ -9,7 +9,7 @@ import { useTheme } from "@/hooks/use-theme";
 export function Navbar() {
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
+  useTheme();
 
   const navLinks = [
     { href: "/products", label: "Products" },
@@ -44,32 +44,6 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Theme Toggle */}
-            <div className="flex items-center bg-muted rounded-lg border border-border/50 p-1 gap-1">
-              <button
-                onClick={() => setTheme('light')}
-                className={`p-1.5 rounded transition-colors ${theme === 'light' ? 'bg-background text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Light mode"
-              >
-                <Sun size={18} />
-              </button>
-              <button
-                onClick={() => setTheme('dark')}
-                className={`p-1.5 rounded transition-colors ${theme === 'dark' ? 'bg-background text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Dark mode"
-              >
-                <Moon size={18} />
-              </button>
-              <div className="w-px h-4 bg-border/40 mx-0.5"></div>
-              <button
-                onClick={() => setTheme('system')}
-                className={`px-2 py-1 rounded text-xs font-medium transition-colors ${theme === 'system' ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
-                title="System theme"
-              >
-                System
-              </button>
-            </div>
-
             <a href="https://map.parkeze.com" target="_blank" rel="noopener noreferrer">
               <Button variant="ghost" size="sm" className="font-medium text-muted-foreground hover:text-foreground">
                 Map
@@ -91,22 +65,6 @@ export function Navbar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center gap-2">
-            <div className="flex items-center bg-muted rounded-lg border border-border/50 p-1 gap-1">
-              <button
-                onClick={() => setTheme('light')}
-                className={`p-1 rounded transition-colors ${theme === 'light' ? 'bg-background text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Light mode"
-              >
-                <Sun size={16} />
-              </button>
-              <button
-                onClick={() => setTheme('dark')}
-                className={`p-1 rounded transition-colors ${theme === 'dark' ? 'bg-background text-primary' : 'text-muted-foreground hover:text-foreground'}`}
-                title="Dark mode"
-              >
-                <Moon size={16} />
-              </button>
-            </div>
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="text-muted-foreground hover:text-foreground p-2"
