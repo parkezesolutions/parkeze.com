@@ -8,6 +8,14 @@
       "destination": "/api/:path*"
     },
     {
+      "source": "/survey",
+      "destination": "https://parkeze-survey.pages.dev/"
+    },
+    {
+      "source": "/survey/:path*",
+      "destination": "https://parkeze-survey.pages.dev/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
